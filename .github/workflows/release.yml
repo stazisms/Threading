@@ -1,7 +1,11 @@
 name: Create and Publish Release
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+    tags-ignore:
+      - 'v*'
 
 jobs:
   release:
