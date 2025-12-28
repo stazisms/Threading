@@ -7,6 +7,12 @@ plugins {
 group = 'goon.core'
 version = '1.0.0-SNAPSHOT'
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
+
 repositories {
     mavenCentral()
     maven { url 'https://jitpack.io' }
@@ -14,8 +20,17 @@ repositories {
 
 dependencies {
     implementation files('libs/ThreadTils.jar')
+
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    enabled = false
 }
 
 shadowJar {
@@ -25,11 +40,11 @@ shadowJar {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact shadowJar
+            artifact(shadowJar)
         }
     }
 }
 
-test {
-    useJUnitPlatform()
+tasks.withType(PublishToMavenLocal).configureEach {
+    dependsOn tasks.shadowJar
 }
